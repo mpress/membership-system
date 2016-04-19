@@ -1,16 +1,12 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var swig = require( 'swig' );
-var nodemailer = require( 'nodemailer' );
-
-var	Members = require( '../../src/js/database' ).Members;
-
-var auth = require( '../../src/js/authentication.js' );
-
-var config = require( '../../config/config.json' );
+	app = express(),
+	swig = require( 'swig'),
+	nodemailer = require( 'nodemailer'),
+	Members = require( '../../src/js/database' ).Members,
+	auth = require( '../../src/js/authentication.js'),
+	config = require( '../../config/config.json' );
 
 app.set( 'views', __dirname + '/views' );
 
@@ -65,7 +61,7 @@ app.post( '/', function( req, res ) {
 						res.redirect( '/join' );
 					} else {
 						var message = {};
-						
+
 						message.text = swig.renderFile( __dirname + '/email-templates/join.swig', {
 							firstname: req.body.firstname,
 							organisation: config.globals.organisation,
@@ -77,7 +73,7 @@ app.post( '/', function( req, res ) {
 						message.from = config.smtp.from;
 						message.to = req.body.email;
 						message.subject = 'Activation Email – ' + config.globals.organisation;
-						
+
 						transporter.sendMail( message, function( err, info ) {
 							if ( err ) {
 								req.flash( 'warning', 'Account created, system was unable to send activation email, please contact the administrator' );

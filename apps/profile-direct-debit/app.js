@@ -1,14 +1,11 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var config = require( '../../config/config.json' );
-
-var auth = require( '../../src/js/authentication.js' ),
-	Members = require( '../../src/js/database' ).Members;
-
-var gocardless = require( 'gocardless' )( config.gocardless );
+	app = express(),
+	config = require( '../../config/config.json'),
+	auth = require( '../../src/js/authentication.js' ),
+	Members = require( '../../src/js/database' ).Members,
+	gocardless = require( 'gocardless' )( config.gocardless );
 
 app.set( 'views', __dirname + '/views' );
 
@@ -100,12 +97,12 @@ app.post( '/webhook', function( req, res ) {
 				// ID = unique payment reference
 
 				switch ( bill.status ) {
-				
+
 					case 'pending':
 						console.log( 'created' );
 						upsertTransaction( bill.source_id, bill.id, bill.status, bill.amount );
 						break;
-				
+
 					case 'paid':
 						console.log( 'paid' );
 						upsertTransaction( bill.source_id, bill.id, bill.status, bill.amount, function( result ) {
@@ -114,12 +111,12 @@ app.post( '/webhook', function( req, res ) {
 							// ACTION: check Discourse group
 						} );
 						break;
-				
+
 					case 'failed':
 						console.log( 'failed' );
 						upsertTransaction( bill.source_id, bill.id, bill.status, bill.amount );
 						break;
-				
+
 					case 'withdrawn':
 						console.log( 'withdrawn' );
 						upsertTransaction( bill.source_id, bill.id, bill.status, bill.amount );

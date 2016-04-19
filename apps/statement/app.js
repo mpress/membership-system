@@ -1,9 +1,8 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var auth = require( '../../src/js/authentication.js' ),
+	app = express(),
+	auth = require( '../../src/js/authentication.js' ),
 	Members = require( '../../src/js/database' ).Members;
 
 app.set( 'views', __dirname + '/views' );

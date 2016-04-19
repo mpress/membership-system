@@ -2,11 +2,8 @@
 
 var	express = require( 'express' ),
 	app = express(),
-	passport = require( 'passport' );
-
-var Members = require( './database' ).Members;
-
-var config = require( '../../config/config.json' );
+	Members = require( './database' ).Members,
+	config = require( '../../config/config.json' );
 
 app.set( 'views', __dirname + '/../views' );
 

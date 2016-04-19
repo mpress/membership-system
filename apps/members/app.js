@@ -1,9 +1,8 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var auth = require( '../../src/js/authentication.js' ),
+	app = express(),
+	auth = require( '../../src/js/authentication.js' ),
 	Members = require( '../../src/js/database' ).Members;
 
 app.set( 'views', __dirname + '/views' );
@@ -27,7 +26,7 @@ app.get( '/', auth.isMember, function( req, res ) {
 					if ( permissions[p].permission.slug == 'member'
 						&& permissions[p].date_added <= new Date()
 						&& (
-							permissions[p].date_expires == undefined 
+							permissions[p].date_expires == undefined
 							|| permissions[p].date_expires > new Date()
 							) ) {
 						activeMembers.push( members[m] );

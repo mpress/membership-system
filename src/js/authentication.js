@@ -5,12 +5,10 @@
 var config = require( '../../config/config.json' );
 
 var Permissions = require( '../../src/js/database' ).Permissions,
-	Members = require( '../../src/js/database' ).Members;;
-
-var passport = require( 'passport' ),
-	LocalStrategy = require( 'passport-local' ).Strategy;
-
-var crypto = require( 'crypto' );
+	Members = require( '../../src/js/database' ).Members,
+	passport = require( 'passport' ),
+	LocalStrategy = require( 'passport-local' ).Strategy,
+	crypto = require( 'crypto' );
 
 function authentication( app ) {
 	// Add support for local authentication

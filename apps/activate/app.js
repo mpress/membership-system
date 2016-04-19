@@ -1,9 +1,8 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var	Members = require( '../../src/js/database' ).Members,
+	app = express(),
+	Members = require( '../../src/js/database' ).Members,
 	auth = require( '../../src/js/authentication' );
 
 app.set( 'views', __dirname + '/views' );
@@ -34,7 +33,7 @@ app.post( '/' , function( req, res ) {
 		Members.findOne( {
 			activation_code: req.body.activation_code,
 		}, function ( err, user ) {
-			
+
 			if ( user == null ) {
 				req.flash( 'danger', 'Activation code or password did not match' );
 				res.redirect( '/activate/' + req.body.activation_code );

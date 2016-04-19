@@ -1,9 +1,8 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var	passport = require( 'passport' );
+	app = express(),
+	passport = require( 'passport' );
 
 app.set( 'views', __dirname + '/views' );
 

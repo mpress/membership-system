@@ -2,13 +2,10 @@
 
 var	express = require( 'express' ),
 	app = express(),
-	request= require( 'request' );
-
-var config = require( '../../config/config.json' );
-
-var Members = require( '../../src/js/database' ).Members;
-
-var auth = require( '../../src/js/authentication.js' );
+	request= require( 'request'),
+	config = require( '../../config/config.json'),
+	Members = require( '../../src/js/database' ).Members,
+	auth = require( '../../src/js/authentication.js' );
 
 app.set( 'views', __dirname + '/views' );
 
@@ -40,7 +37,7 @@ app.get( '/', auth.isLoggedIn, function( req, res ) {
 	} else if ( ! req.user.discourse.activated ) {
 		res.render( 'activate', { activation_code: req.query.code } );
 
-	// Linked 
+	// Linked
 	} else if ( req.user.discourse.activated ) {
 		findDiscourseUserByEmail( req.user.discourse.email, function( user ) {
 			user.avatar = config.discourse.url + user.avatar_template.replace( '{size}', 100 );
@@ -53,7 +50,7 @@ app.post( '/link', auth.isLoggedIn, function( req, res ) {
 	if ( ! req.user.discourse.activation_code ) {
 		auth.generateActivationCode( function( code ) {
 			code = code.toString( 'hex' );
-			
+
 			Members.update( { "_id": req.user._id }, { $set: {
 				"discourse.activation_code": code
 			} }, function ( error ) {} );
@@ -61,7 +58,7 @@ app.post( '/link', auth.isLoggedIn, function( req, res ) {
 			findDiscourseUserByEmail( req.user.discourse.email, function ( user ) {
 				sendDiscourseActivationMessage( user.username, code );
 			} );
-			
+
 			req.flash( 'info', 'Activation code sent to your Discourse private messages' );
 		} );
 	} else {

@@ -1,11 +1,9 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var config = require( '../../config/config.json' );
-
-var Members = require( '../../src/js/database' ).Members;
+	app = express(),
+	config = require( '../../config/config.json'),
+	Members = require( '../../src/js/database' ).Members;
 
 app.get( '/', function( req, res ) {
 	var response = [ 'API not yet implemented' ];
@@ -21,7 +19,7 @@ app.get( '/permission/:slug/:tag', function( req, res ) {
 				var hasMembership = false;
 				var hasPermission = false;
 				var isTrustee = false;
-				
+
 				for ( var p = 0; p < member.permissions.length; p++ ) {
 					var permission = member.permissions[p];
 					if ( permission.permission.slug == 'trustee' && permission.date_added <= new Date() && ( permission.date_expires == undefined || permission.date_expires > new Date() ) ) isTrustee = true;
