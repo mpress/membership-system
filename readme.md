@@ -5,7 +5,9 @@ This is a system for managing membership and payment to South London Makerspace.
 
 You need to install and run mongodb as described [here](https://docs.mongodb.org/manual/installation/)
 
-Clone the repo. Then run:
+Clone the repo. You will need to create your config.json file. You can do this by copying the example-config.json.
+
+Then run:
 ```
 npm update
 ```
