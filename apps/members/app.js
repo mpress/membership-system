@@ -20,16 +20,16 @@ app.get( '/', auth.isMember, function( req, res ) {
 	Members.find().populate( 'permissions.permission' ).exec( function( err, members ) {
 		var activeMembers = [];
 		for ( var m = 0; m < members.length; m++ ) {
-			if ( members[m].activated ) {
-				var permissions = members[m].permissions;
+			if ( members[ m ].activated ) {
+				var permissions = members[ m ].permissions;
 				for ( var p = 0; p < permissions.length; p++ ) {
-					if ( permissions[p].permission.slug == 'member'
-						&& permissions[p].date_added <= new Date()
+					if ( permissions[p].permission.slug === 'member'
+						&& permissions[ p ].date_added <= new Date()
 						&& (
-							permissions[p].date_expires == undefined
-							|| permissions[p].date_expires > new Date()
+							permissions[ p ].date_expires === undefined
+							|| permissions[ p ].date_expires > new Date()
 							) ) {
-						activeMembers.push( members[m] );
+						activeMembers.push( members[ m ] );
 					}
 				}
 			}

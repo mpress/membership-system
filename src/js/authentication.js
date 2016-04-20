@@ -40,15 +40,17 @@ function authentication( app ) {
 
 	passport.deserializeUser( function( data, done ) {
 		Members.findById( data._id ).populate( 'permissions.permission' ).exec( function( err, user ) {
-			if ( user != null ) {
+			if ( user !== null ) {
 				var permissions = [ 'loggedIn' ];
 
-				if ( superAdmin( user.email ) )
+				if ( superAdmin( user.email ) ){
+
 					permissions.push( 'superadmin' );
+				}
 
 				for ( var p = 0; p < user.permissions.length; p++ ) {
-					if ( user.permissions[p].date_added <= new Date() ) {
-						if ( user.permissions[p].date_expires == undefined || user.permissions[p].date_expires > new Date() ) {
+					if ( user.permissions[ p ].date_added <= new Date() ) {
+						if ( user.permissions[ p ].date_expires === undefined || user.permissions[ p ].date_expires > new Date() ) {
 							permissions.push( user.permissions[p].permission.slug );
 						}
 					}
@@ -98,7 +100,7 @@ function generatePassword( password, callback ) {
 }
 
 function superAdmin( email ) {
-	if ( config.superadmins.indexOf( email ) != -1 ) {
+	if ( config.superadmins.indexOf( email ) !== -1 ) {
 		return true;
 	}
 	return false;
@@ -106,7 +108,7 @@ function superAdmin( email ) {
 
 function loggedIn( req ) {
 	// Is the user logged in?
-	if ( req.isAuthenticated() && req.user != undefined ) {
+	if ( req.isAuthenticated() && req.user !== undefined ) {
 		// Is the user active
 		if ( req.user.activated || superAdmin( req.user.email ) ) {
 			return true;
@@ -147,7 +149,7 @@ function canAdmin( req ) {
 
 function checkPermission( req, permission ) {
 	if ( req.user == undefined ) return false;
-	if ( req.user.quickPermissions.indexOf( permission ) != -1 ) return true;
+	if ( req.user.quickPermissions.indexOf( permission ) !== -1 ) return true;
 	return false;
 }
 
@@ -184,7 +186,7 @@ function isMember( req, res, next ) {
 			return;
 		default:
 		case false:
-			if ( req.method == 'GET' ) req.session.requestedUrl = req.originalUrl;
+			if ( req.method === 'GET' ) req.session.requestedUrl = req.originalUrl;
 			req.flash( 'error', 'You must be logged in first' );
 			res.redirect( '/login' );
 			return;
@@ -228,13 +230,13 @@ function passwordRequirements( password ) {
 	if ( password.length < 8 )
 		return "Password must be at least 8 characters long";
 
-	if ( password.match( /\d/g ) == null )
+	if ( password.match( /\d/g ) === null )
 		return "Password must contain at least 1 number"
 
-	if ( password.match( /[A-Z]/g ) == null )
+	if ( password.match( /[A-Z]/g ) === null )
 		return "Password must contain at least 1 uppercase letter"
 
-	if ( password.match( /[a-z]/g ) == null )
+	if ( password.match( /[a-z]/g ) === null )
 		return "Password must contain at least 1 lowercase letter"
 
 	return true;

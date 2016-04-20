@@ -20,7 +20,7 @@ app.use( function( req, res, next ) {
 app.get( '/', auth.isLoggedIn, function( req, res ) {
 	Members.findById( req.user._id ).populate( 'permissions.permission' ).exec( function( err, user ) {
 		res.render( 'profile', { user: user } );
-	} )
+	} );
 } );
 
 app.get( '/update', auth.isLoggedIn, function( req, res ) {
@@ -39,11 +39,11 @@ app.post( '/update', auth.isLoggedIn, function( req, res ) {
 	};
 
 	Members.update( { _id: req.user._id }, { $set: profile }, { runValidators: true }, function( status ) {
-		if ( status != null ) {
+		if ( status !== null ) {
 			var keys = Object.keys( status.errors );
 			for ( var k in keys ) {
-				var key = keys[k];
-				req.flash( 'danger', status.errors[key].message );
+				var key = keys[ k ];
+				req.flash( 'danger', status.errors[ key ].message );
 			}
 		} else {
 			req.flash( 'success', 'Your profile has been updated' );
@@ -67,11 +67,11 @@ app.post( '/tag', auth.isLoggedIn, function( req, res ) {
 	};
 
 	Members.update( { _id: req.user._id }, { $set: profile }, { runValidators: true }, function( status ) {
-		if ( status != null ) {
+		if ( status !== null ) {
 			var keys = Object.keys( status.errors );
 			for ( var k in keys ) {
-				var key = keys[k];
-				req.flash( 'danger', status.errors[key].message );
+				var key = keys[ k ];
+				req.flash( 'danger', status.errors[ key ].message );
 			}
 		} else {
 			req.flash( 'success', 'Your profile has been updated' );

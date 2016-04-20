@@ -22,7 +22,7 @@ app.get( '/', auth.isLoggedIn, function( req, res ) {
 	// Not linked or in activation
 	if ( ! req.user.discourse.activated && ! req.user.discourse.activation_code ) {
 		findDiscourseUserByEmail( req.user.email, function( user ) {
-			if ( user != undefined ) {
+			if ( user !== undefined ) {
 				Members.update( { "_id": req.user._id }, { $set: {
 					"discourse.id": user.id,
 					"discourse.email": req.user.email
@@ -68,8 +68,8 @@ app.post( '/link', auth.isLoggedIn, function( req, res ) {
 } );
 
 app.post( '/activate', auth.isLoggedIn, function( req, res ) {
-	if ( req.body.activation_code != '' ) {
-		if ( req.body.activation_code == req.user.discourse.activation_code ) {
+	if ( req.body.activation_code !== '' ) {
+		if ( req.body.activation_code === req.user.discourse.activation_code ) {
 			Members.update( { "_id": req.user._id }, { $set: {
 				"discourse.activated": true,
 				"discourse.activation_code": null
@@ -91,10 +91,10 @@ function findDiscourseUserByEmail( email, callback ) {
 			filter: email
 		}
 	}, function ( error, response, body ) {
-		if ( response.statusCode == '200 ') {
+		if ( response.statusCode === '200') {
 			var output = JSON.parse( body );
-			if ( output[0] != undefined ) {
-				return callback( output[0] );
+			if ( output[ 0 ] !== undefined ) {
+				return callback( output[ 0 ] );
 			}
 		}
 		return callback();

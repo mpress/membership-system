@@ -5,7 +5,7 @@ var body = require( 'body-parser' ),
 	database = require( __dirname + '/src/js/database').connect( config.mongo ),
 	express = require( 'express' ),
 	flash = require( 'express-flash' ),
-	swig = require( 'swig'),
+	swig = require( 'swig' ),
 	app = express(),
 	http = require( 'http' ).Server( app );
 
@@ -51,10 +51,10 @@ app.use( function( req, res, next ) {
 	if ( req.user ) {
 		res.locals.loggedIn = true;
 		for ( var a in config.apps ) {
-			var app = config.apps[a];
+			var app = config.apps[ a ];
 			if ( app.permissions != undefined && app.permissions != [] ) {
 				for ( var p in app.permissions ) {
-					if ( req.user.quickPermissions.indexOf( app.permissions[p] ) != -1 ) {
+					if ( req.user.quickPermissions.indexOf( app.permissions[ p ] ) != -1 ) {
 						res.locals.apps.push( app );
 						break;
 					}
@@ -66,7 +66,7 @@ app.use( function( req, res, next ) {
 	// Delete login redirect URL if user navigates to anything other than the login page
 	if ( req.originalUrl != '/login' )
 		delete req.session.requestedUrl;
-	
+
 	// Load config + prepare breadcrumbs
 	res.locals.config = config.globals;
 	res.locals.breadcrumb = [];
@@ -78,15 +78,15 @@ app.engine( 'swig', swig.renderFile );
 app.set( 'views', __dirname + '/src/views' );
 app.set( 'view engine', 'swig' );
 app.set( 'view cache', false ); // Disables cache
-swig.setDefaults( { cache: false } ); // Disables cache
+swig.setDefaults( { cache : false } ); // Disables cache
 
 // Load top level app
 app.use( '/', require( __dirname + '/src/js/routes' ) );
 
 // Load apps
 for ( var a in config.apps ) {
-	var name = ( config.apps[a].name ? config.apps[a].name : config.apps[a].path );
-	app.use( '/' + config.apps[a].path, require( __dirname + '/apps/' + name + '/app' ) );
+	var name = ( config.apps[ a ].name ? config.apps[ a ].name : config.apps[ a ].path );
+	app.use( '/' + config.apps[ a ].path, require( __dirname + '/apps/' + name + '/app' ) );
 }
 
 // Error 404

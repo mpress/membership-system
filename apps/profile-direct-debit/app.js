@@ -19,7 +19,7 @@ app.use( function( req, res, next ) {
 } );
 
 app.post( '/setup', auth.isLoggedIn, function( req, res ) {
-	if ( req.body.amount < ( req.user.gocardless.minimum ? req.user.gocardless.minimum : config.gocardless.minimum ) ) {
+	if ( req.body.amount < ( req.user.gocardless.minimum || config.gocardless.minimum ) ) {
 		req.flash( 'danger', 'Minimum direct debit amount is £' + config.gocardless.minimum );
 		return res.redirect( '/profile/direct-debit' );
 	}
@@ -46,7 +46,9 @@ app.post( '/setup', auth.isLoggedIn, function( req, res ) {
 
 app.get( '/confirm', auth.isLoggedIn, function( req, res ) {
 	gocardless.confirmResource( req.query, function( err, request, body ) {
-		if ( err ) return res.end( 401, err );
+		if ( err ) {
+			return res.end( 401, err );
+		}
 		Members.update( { _id: req.user._id }, { $set: { "gocardless.id": req.query.resource_id } }, function ( err ) {
 			req.flash( 'success', 'Direct Debit setup succesfully' );
 			res.redirect( '/profile/direct-debit' );
@@ -57,7 +59,7 @@ app.get( '/confirm', auth.isLoggedIn, function( req, res ) {
 app.get( '/', auth.isLoggedIn, function( req, res ) {
 	res.render( 'index', {
 		gocardless: req.user.gocardless,
-		amount: ( req.user.gocardless.minimum ? req.user.gocardless.minimum : config.gocardless.minimum )
+		amount: ( req.user.gocardless.minimum || config.gocardless.minimum )
 	} );
 } );
 
@@ -68,10 +70,10 @@ app.get( '/cancel', auth.isLoggedIn, function( req, res ) {
 app.post( '/cancel', auth.isLoggedIn, function( req, res ) {
 	gocardless.subscription.cancel( {
 		id: req.user.gocardless.id
-	}, function( err,response, body ) {
+	}, function( err, response, body ) {
 		var response = JSON.parse( body );
 
-		if ( response.status == 'cancelled' ) {
+		if ( response.status === 'cancelled' ) {
 			Members.update( { _id: req.user._id }, { $set: { gocardless: { id: '', amount: '' } } }, function( err ) {
 				req.flash( 'success', 'Direct debit cancelled' );
 				res.redirect( '/profile/direct-debit' );
@@ -86,7 +88,7 @@ app.post( '/cancel', auth.isLoggedIn, function( req, res ) {
 app.post( '/webhook', function( req, res ) {
 	if ( gocardless.webhookValid( req.body ) ) {
 
-		if ( req.body.payload.bills != undefined ) {
+		if ( req.body.payload.bills !== undefined ) {
 			var bills = req.body.payload.bills;
 			for ( var b in bills ) {
 				var bill = bills[b];
@@ -125,13 +127,13 @@ app.post( '/webhook', function( req, res ) {
 			}
 		}
 
-		if ( req.body.payload.subscriptions != undefined ) {
+		if ( req.body.payload.subscriptions !== undefined ) {
 			var subscriptions = req.body.payload.subscriptions;
 			for ( var s in subscriptions ) {
 				var subscription = subscriptions[s];
-				if ( subscription.status == 'cancelled' ) {
+				if ( subscription.status === 'cancelled' ) {
 					Members.findOne( { "gocardless.id": subscription.id }, function( err, member ) {
-						if ( member == undefined ) return;
+						if ( member === undefined ) return;
 						member.gocardless.id = '';
 						member.gocardless.amount = '';
 						member.save( function( err ) {} );
@@ -147,7 +149,9 @@ app.post( '/webhook', function( req, res ) {
 
 function upsertTransaction( subscription_id, bill_id, status, amount, callback ) {
 	Members.findOne( { 'gocardless.id': subscription_id }, function( err, member ) {
-		if ( member == undefined ) callback();
+		if ( member === undefined ) {
+			callback();
+		}
 
 		var transactions = member.gocardless.transactions;
 		var exists;
@@ -155,7 +159,7 @@ function upsertTransaction( subscription_id, bill_id, status, amount, callback )
 		// Look for existing transaction record
 		for ( var t = 0; t < transactions.length; t++ ) {
 			var transaction = transactions[t];
-			if ( transaction.bill_id == bill_id ) {
+			if ( transaction.bill_id === bill_id ) {
 				exists = t;
 				break;
 			}

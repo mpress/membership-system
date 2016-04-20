@@ -51,7 +51,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:id', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.id } ).populate( 'permissions.permission' ).exec( function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -59,7 +59,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 			res.locals.breadcrumb.push( {
 				name: member.fullname
 			} );
-			res.render( 'member', { member: member, audience: config.audience, superadmin: ( config.superadmins.indexOf( member.email ) != -1 ? true : false ) } );
+			res.render( 'member', { member: member, audience: config.audience, superadmin: ( config.superadmins.indexOf( member.email ) !== -1 ) } );
 		} );
 	} );
 
@@ -68,7 +68,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:id/update', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.id }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -103,7 +103,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:id/activation', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.id }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -113,7 +113,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 				url: '/admin/members/' + member._id
 			} );
 			res.locals.breadcrumb.push( {
-				name: 'Activation',
+				name: 'Activation'
 			} );
 			res.render( 'member-activation', { member: member } );
 		} );
@@ -139,7 +139,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:id/tag', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.id }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -164,10 +164,10 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 		};
 
 		Members.update( { _id: req.params.id }, { $set: profile }, { runValidators: true }, function( status ) {
-			if ( status != null ) {
+			if ( status !== null ) {
 				var keys = Object.keys( status.errors );
 				for ( var k in keys ) {
-					var key = keys[k];
+					var key = keys[ k ];
 					req.flash( 'danger', status.errors[key].message );
 				}
 			} else {
@@ -182,7 +182,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:id/discourse', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.id }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -217,7 +217,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:id/gocardless', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.id }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -253,7 +253,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 	members.get( '/:id/permissions', auth.isAdmin, function( req, res ) {
 		Permissions.find( function( err, permissions ) {
 			Members.findOne( { _id: req.params.id } ).populate( 'permissions.permission' ).exec( function( err, member ) {
-				if ( member == undefined ) {
+				if ( member === undefined ) {
 					req.flash( 'warning', 'Member not found' );
 					res.redirect( '/admin/members' );
 					return;
@@ -276,14 +276,14 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.post( '/:id/permissions', auth.isAdmin, function( req, res ) {
 		Permissions.findOne( { slug: req.body.permission }, function( err, permission ) {
-			if ( permission != undefined ) {
+			if ( permission !== undefined ) {
 				var new_permission = {
 					permission: permission._id
 				}
 
 				new_permission.date_added = new Date( req.body.start_date + 'T' + req.body.start_time );
 
-				if ( req.body.expiry_date != '' && req.body.expiry_time != '' )
+				if ( req.body.expiry_date !== '' && req.body.expiry_time !== '' )
 					new_permission.date_expires = new Date( req.body.expiry_date + 'T' + req.body.expiry_time );
 
 				if ( new_permission.date_added >= new_permission.date_expires ) {
@@ -311,13 +311,13 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 	members.get( '/:mid/permissions/:pid/modify', auth.isAdmin, function( req, res ) {
 		Permissions.find( function( err, permissions ) {
 			Members.findOne( { _id: req.params.mid } ).populate( 'permissions.permission' ).exec( function( err, member ) {
-				if ( member == undefined ) {
+				if ( member === undefined ) {
 					req.flash( 'warning', 'Member not found' );
 					res.redirect( '/admin/members' );
 					return;
 				}
 
-				if ( member.permissions.id( req.params.pid ) == undefined ) {
+				if ( member.permissions.id( req.params.pid ) === undefined ) {
 					req.flash( 'warning', 'Permission not found' );
 					res.redirect( '/admin/members' );
 					return;
@@ -341,20 +341,20 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.post( '/:mid/permissions/:pid/modify', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.mid }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
 			}
 
-			if ( member.permissions.id( req.params.pid ) == undefined ) {
+			if ( member.permissions.id( req.params.pid ) === undefined ) {
 				req.flash( 'warning', 'Permission not found' );
 				res.redirect( '/admin/members' );
 				return;
 			}
 
 			Permissions.findOne( { slug: req.body.permission }, function( err, newPermission ) {
-				if ( newPermission == undefined ) {
+				if ( newPermission === undefined ) {
 					req.flash( 'warning', 'New permission not found' );
 					res.redirect( '/admin/members' );
 					return;
@@ -363,13 +363,13 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 				var permission = member.permissions.id( req.params.pid );
 				permission.permission = newPermission._id;
 
-				if ( req.body.start_date != '' && req.body.start_time != '' ) {
+				if ( req.body.start_date !== '' && req.body.start_time !== '' ) {
 					permission.date_added = new Date( req.body.start_date + 'T' + req.body.start_time );
 				} else {
 					permission.date_added = new Date();
 				}
 
-				if ( req.body.expiry_date != '' && req.body.expiry_time != '' ) {
+				if ( req.body.expiry_date !== '' && req.body.expiry_time !== '' ) {
 					permission.date_expires = new Date( req.body.expiry_date + 'T' + req.body.expiry_time );
 
 					if ( permission.date_added >= permission.date_expires ) {
@@ -394,13 +394,13 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	members.get( '/:mid/permissions/:pid/revoke', auth.isAdmin, function( req, res ) {
 		Members.findOne( { _id: req.params.mid }, function( err, member ) {
-			if ( member == undefined ) {
+			if ( member === undefined ) {
 				req.flash( 'warning', 'Member not found' );
 				res.redirect( '/admin/members' );
 				return;
 			}
 
-			if ( member.permissions.id( req.params.pid ) == undefined ) {
+			if ( member.permissions.id( req.params.pid ) === undefined ) {
 				req.flash( 'warning', 'Permission not found' );
 				res.redirect( '/admin/members' );
 				return;
@@ -460,7 +460,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 
 	permissions.get( '/:id/edit', auth.isAdmin, function( req, res ) {
 		Permissions.findOne( { _id: req.params.id }, function( err, permission ) {
-			if ( permission == undefined ) {
+			if ( permission === undefined ) {
 				req.flash( 'warning', 'Permission not found' );
 				res.redirect( '/admin/permissions' );
 				return;

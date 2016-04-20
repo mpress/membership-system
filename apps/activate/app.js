@@ -31,17 +31,17 @@ app.post( '/' , function( req, res ) {
 		res.redirect( '/profile' );
 	} else {
 		Members.findOne( {
-			activation_code: req.body.activation_code,
+			activation_code: req.body.activation_code
 		}, function ( err, user ) {
 
-			if ( user == null ) {
+			if ( user === null ) {
 				req.flash( 'danger', 'Activation code or password did not match' );
 				res.redirect( '/activate/' + req.body.activation_code );
 				return;
 			}
 
 			auth.hashPassword( req.body.password, user.password_salt, function( hash ) {
-				if ( user.password_hash != hash ) {
+				if ( user.password_hash !== hash ) {
 					req.flash( 'danger', 'Activation code or password did not match' );
 					res.redirect( '/activate/' + req.body.activation_code );
 					return;
@@ -57,9 +57,9 @@ app.post( '/' , function( req, res ) {
 					}
 				}, function ( status ) {
 					req.session.passport = { user: { _id: user._id } };
-					req.flash( 'success', 'You account is now active.' )
+					req.flash( 'success', 'You account is now active.' );
 					res.redirect( '/profile' );
-				} )
+				} );
 			} );
 		} );
 	}

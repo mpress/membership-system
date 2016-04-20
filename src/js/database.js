@@ -7,7 +7,7 @@ exports.connect = function( url ) {
 	mongoose.connect( url );
 	var db = mongoose.connection;
 	db.on( 'error', console.error.bind( console, 'connection error' ) );
-}
+};
 
 var permissionsSchema = mongoose.Schema( {
 	_id: {
@@ -112,9 +112,9 @@ var memberSchema = mongoose.Schema( {
 			default: false
 		},
 		activation_code: {
-			type: String	
+			type: String
 		},
-			
+
 	},
 	gocardless: {
 		id: {

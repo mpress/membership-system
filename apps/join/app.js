@@ -29,10 +29,10 @@ app.post( '/', function( req, res ) {
 			firstname: req.body.firstname,
 			lastname: req.body.lastname,
 			email: req.body.email,
-			address: req.body.address,
+			address: req.body.address
 		};
 
-		if ( req.body.password != req.body.verify ) {
+		if ( req.body.password !== req.body.verify ) {
 			req.flash( 'danger', 'Passwords did not match' );
 			req.session.join = user;
 			res.redirect( '/join' );
@@ -51,11 +51,11 @@ app.post( '/', function( req, res ) {
 				// Store new member
 				new Members( user ).save( function( status ) {
 					console.log( status );
-					if ( status != null && status.errors != undefined ) {
+					if ( status !== null && status.errors !== undefined ) {
 						var keys = Object.keys( status.errors );
 						for ( var k in keys ) {
-							var key = keys[k];
-							req.flash( 'danger', status.errors[key].message );
+							var key = keys[ k ];
+							req.flash( 'danger ', status.errors[ key ].message );
 						}
 						req.session.join = user;
 						res.redirect( '/join' );
