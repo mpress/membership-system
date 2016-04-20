@@ -1,18 +1,12 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var swig = require( 'swig' );
-var nodemailer = require( 'nodemailer' );
-
-var	Members = require( '../../src/js/database' ).Members;
-
-var crypto = require( 'crypto' );
-
-var config = require( '../../config/config.json' );
-
-var auth = require( '../../src/js/authentication.js' );
+	app = express(),
+	swig = require( 'swig'),
+	nodemailer = require( 'nodemailer'),
+	Members = require( '../../src/js/database' ).Members,
+	config = require( '../../config/config.json'),
+	auth = require( '../../src/js/authentication.js' );
 
 app.set( 'views', __dirname + '/views' );
 
@@ -31,7 +25,7 @@ app.post( '/', function( req, res ) {
 				} );
 
 				var message = {};
-							
+
 				message.text = swig.renderFile( __dirname + '/email-templates/reset.swig', {
 					firstname: user.firstname,
 					organisation: config.globals.organisation,
@@ -43,7 +37,7 @@ app.post( '/', function( req, res ) {
 				message.from = config.smtp.from;
 				message.to = user.email;
 				message.subject = 'Password Reset – ' + config.globals.organisation;
-				
+
 				transporter.sendMail( message, function( err, info ) {
 				} );
 			} );

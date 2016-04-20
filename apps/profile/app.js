@@ -1,15 +1,10 @@
 "use strict";
 
 var	express = require( 'express' ),
-	app = express();
-
-var Members = require( '../../src/js/database' ).Members;
-
-var crypto = require( 'crypto' );
-
-var config = require( '../../config/config.json' );
-
-var auth = require( '../../src/js/authentication.js' );
+	app = express(),
+	Members = require( '../../src/js/database' ).Members,
+	config = require( '../../config/config.json'),
+	auth = require( '../../src/js/authentication.js' );
 
 app.set( 'views', __dirname + '/views' );
 

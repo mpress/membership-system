@@ -3,11 +3,9 @@
 var	express = require( 'express' ),
 	app = express(),
 	Permissions = require( '../../src/js/database' ).Permissions,
-	Members = require( '../../src/js/database' ).Members;
-
-var auth = require( '../../src/js/authentication.js' );
-
-var config = require( '../../config/config.json' );
+	Members = require( '../../src/js/database' ).Members,
+	auth = require( '../../src/js/authentication.js'),
+	config = require( '../../config/config.json' );
 
 app.set( 'views', __dirname + '/views' );
 
@@ -318,7 +316,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 					res.redirect( '/admin/members' );
 					return;
 				}
-				
+
 				if ( member.permissions.id( req.params.pid ) == undefined ) {
 					req.flash( 'warning', 'Permission not found' );
 					res.redirect( '/admin/members' );
@@ -365,7 +363,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 				var permission = member.permissions.id( req.params.pid );
 				permission.permission = newPermission._id;
 
-				if ( req.body.start_date != '' && req.body.start_time != '' ) { 
+				if ( req.body.start_date != '' && req.body.start_time != '' ) {
 					permission.date_added = new Date( req.body.start_date + 'T' + req.body.start_time );
 				} else {
 					permission.date_added = new Date();
@@ -401,7 +399,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 				res.redirect( '/admin/members' );
 				return;
 			}
-			
+
 			if ( member.permissions.id( req.params.pid ) == undefined ) {
 				req.flash( 'warning', 'Permission not found' );
 				res.redirect( '/admin/members' );
@@ -467,7 +465,7 @@ app.get( '/', auth.isAdmin, function( req, res ) {
 				res.redirect( '/admin/permissions' );
 				return;
 			}
-		
+
 			res.locals.breadcrumb.push( {
 				name: permission.name
 			} );
