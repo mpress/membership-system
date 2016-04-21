@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
-NODEMON=$(npm list -g --depth=0 | grep beanz)
+NODEMON=$(npm list -g --depth=0 | grep nodemon)
 if [[ $NODEMON == *"nodemon"* ]]; then
-	echo "$NODEMON"
-	#DEBUG=express:* nodemon app.js
+	DEBUG=express:* nodemon app.js
 else
 	CODE='\033[0;31m'
 	NO_COLOUR='\033[0m'
