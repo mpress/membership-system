@@ -5,7 +5,9 @@ This is a system for managing membership and payment to South London Makerspace.
 
 You need to install and run mongodb as described [here](https://docs.mongodb.org/manual/installation/)
 
-Clone the repo. You will need to create your config.json file. You can do this by copying the example-config.json.
+Clone the repo. 
+
+You will need to create your config.json file. You can do this by copying the example-config.json.
 
 Then run:
 ```
@@ -19,7 +21,12 @@ You can automatically compile your css as you edit the less files by running:
 npm run watch
 ```
 
-To run the application:
+To run the application now requires nodemon. Install it by running:
+```
+npm install -g nodemon
+```
+Then you can start the application:
+
 ```
 npm start
 ```
